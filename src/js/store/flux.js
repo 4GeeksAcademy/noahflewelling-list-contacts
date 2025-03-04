@@ -1,45 +1,30 @@
 const getState = ({ getStore, getActions, setStore }) => {
-	return {
-		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
-		},
-		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
-			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
-			}
-		}
-	};
+    return {
+        store: {
+            contacts: [
+                { name: "Alice Johnson", phone: "555-1234", email: "alice@example.com" },
+                { name: "Bob Smith", phone: "555-5678", email: "bob@example.com" }
+            ]
+        },
+        actions: {
+            addNewContact: () => {
+                const store = getStore();
+                const newContact = { name: "New Contact", phone: "000-0000", email: "new@example.com" };
+                setStore({ contacts: [...store.contacts, newContact] });
+            },
+            deleteContact: (index) => {
+                const store = getStore();
+                setStore({ contacts: store.contacts.filter((_, i) => i !== index) });
+            },
+            editContact: (index) => {
+                const store = getStore();
+                let updatedContacts = [...store.contacts];
+                updatedContacts[index].name = prompt("Enter new name", updatedContacts[index].name) || updatedContacts[index].name;
+                updatedContacts[index].phone = prompt("Enter new phone", updatedContacts[index].phone) || updatedContacts[index].phone;
+                updatedContacts[index].email = prompt("Enter new email", updatedContacts[index].email) || updatedContacts[index].email;
+                setStore({ contacts: updatedContacts });
+            }
+        }
+    };
 };
-
 export default getState;
